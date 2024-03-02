@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Личный кабинет</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+  <link rel="icon" href="https://img.icons8.com/?size=48&id=Oi6NZDZTenrC&format=png" type="image/x-icon">
+</head>
+
+<body>
+<div th:replace="~{/layouts/header :: header}"></div>
+<br> <br>
+<main>
+    <h1 th:text="'Моя страница: ' + ${user.username}" /><br>
+<div class="container">
+  <img th:src="${user.photo}" class="product" style="height: 300px; width: 300px; overflow: auto; margin-bottom: 50px">
+</div>
+
+        <div class="addmoney">
+        Мой баланс: <div th:text="${userBalance}" class="balance"/> р.<br>
+        <form th:action="'/addmoney'" method="post" class="moneyform">
+            <input type="number" placeholder="1000.0р" name="summ" class="moneyinput">
+            <button type="submit" class="moneybutton">Пополнить</button>
+        </form>
+        </div><br><br>
+
+  <div class="container" style="margin: auto;">
+    <form method="post" th:action="@{/user/update}">
+      <h5>имя пользователя:</h5>
+      <input type="text" name="name" th:value="${user.name}">
+      <h5>фамилия пользователя:</h5>
+      <input type="text" name="surname" th:value="${user.surname}">
+      <h5>email:</h5>
+      <input type="text" name="email" th:value="${user.email}"> 
+      <h5>фото:</h5>
+      <input type="text" name="photo" th:value="${user.photo}"> 
+      <button type="submit" >Изменить</button>
+    </form>
+  </div>
+  <div class="container">
+    <form method="post" th:action="@{/logout}">
+      <button type="submit">Выйти</button>
+    </form>
+  </div>
+  <br><br>
+
+  <h5>Мои чаты:</h5>
+  <div class="container">
+    <div th:if="${!chats.isEmpty()}">
+      <div th:each="chat : ${chats}">
+        <a th:href="'/user/' + ${chat.id} + '/chat'" title="Чат" style="color: gray">
+          <div th:text="${chat.username}"/>
+            <div th:if="${chat.active}" class="online">
+                Открыть чат (online)
+            </div>
+            <div th:if="${!chat.active}" class="offline">
+                Открыть чат (offline)
+            </div>
+        </a>
+      </div>
+      <br><br>
+      <div th:if="${chats.isEmpty()}">
+        <p>Нет чатов</p>
+      </div>
+    </div>
+  </div> <br><br>
+
+
+  <h5>Мои друзья:</h5><br>
+  <div class="container">
+  <div th:if="${!user.friends.isEmpty()}" class="user-container">
+    <div th:each="friend : ${user.friends}" class="user-block">
+      <a th:href="'/user/' + ${friend.id}" title="Открыть страницу пользователя" style="color: green">
+        <img th:src="${friend.photo}" alt="Фото пользователя" class="profile-photo" />
+        <h6 th:text="${friend.name} + ' ' + ${friend.surname}" />
+          <div th:if="${friend.active}" class="online">
+              online
+          </div>
+          <div th:if="${!friend.active}" class="offline">
+              offline
+          </div>
+      </a>
+    </div>
+  </div>
+  <div th:if="${user.friends.isEmpty()}">
+    <div class="container">
+      <p>У вас пока нет друзей</p>
+    </div>
+  </div>
+  </div><br><br>
+
+  <h5>Мои подписчики:</h5><br>
+  <div class="container">
+    <div th:if="${!user.followers.isEmpty()}" class="user-container">
+      <div th:each="follower : ${user.followers}" class="user-block">
+          <a th:href="'/user/' + ${follower.id}" title="Открыть страницу пользователя">
+              <img th:src="${follower.photo}" alt="Фото пользователя" class="profile-photo" />
+              <h6 th:text="${follower.name + ' ' + follower.surname}"></h6>
+              <div th:if="${follower.active}" class="online">
+                  online
+              </div>
+              <div th:if="${!follower.active}" class="offline">
+                  offline
+              </div>
+          </a>
+          <a th:href="'/user/' + ${follower.id} + '/addfriend'" class="add-friend-link">принять в друзья</a>
+      </div>
+  </div>
+  
+    <div th:if="${user.followers.isEmpty()}">
+      <div class="container">
+        <p>У вас пока нет подписчиков</p>
+      </div>
+    </div>
+  </div> <br><br>
+
+  <h5>Мои покупки:</h5><br>
+  <div class="container">
+    <div class="items" th:if="${!myOrders.isEmpty()}">
+        <div th:each="el : ${myOrders}" class="item-block">
+            <div th:if="${el.isPay}">
+                <a th:href="'/item/' + ${el.item.id}" title="Открыть страницу товара" class="item-link">
+                    
+                        <img th:src="${el.item.image}" th:alt="${el.item.title}">
+                        <h3 th:text="${el.item.title}" />
+                        <p th:text="${el.item.info}" />
+                        <span th:text="${el.item.price} + 'р.'" />
+                        <span th:text="'Статус заказа: ' + ${el.orderStatusSet}" /><br><br>
+                    <div th:if="${el.seller.active}" class="online">
+                        Продавец online
+                    </div>
+                    <div th:if="${!el.seller.active}" class="offline">
+                        Продавец offline
+                    </div>
+                        <a th:href="'/user/' + ${el.seller.id}"><p>Страница продавца</p></a>
+                        <a th:href="'/user/' + ${el.seller.id} + '/chat'"><p>Написать продавцу</p></a>
+
+                </a>
+            </div>
+            <div th:if="${!el.isPay}">
+                <h5>Не оплачено!</h5>
+
+                <a th:href="'/item/' + ${el.item.id}" title="Открыть страницу товара" class="item-link">
+                        <img th:src="${el.item.image}" th:alt="${el.item.title}">
+
+                        <h3 th:text="${el.item.title}" />
+                        <p th:text="${el.item.info}" />
+                        <span th:text="${el.item.price} + 'р.'" /><br><br>
+                    <div th:if="${el.seller.active}" class="online">
+                        Продавец online
+                    </div>
+                    <div th:if="${!el.seller.active}" class="offline">
+                        Продавец offline
+                    </div>
+                  <a th:href="'/user/' + ${el.seller.id}" ><p>Страница продавца</p></a>
+                  <a th:href="'/user/' + ${el.seller.id} + '/chat'"><p>Написать продавцу</p></a>
+                </a>
+                <a th:href="'/item/buy/' + ${el.id}"><button type="submit">Оплатить</button></a>
+                </div>
+        </div>
+    </div>
+
+  <div th:if="${myOrders.isEmpty()}">
+    <div class="container">
+      <p>У вас ни одного заказа</p>
+    </div>
+  </div> <br>
+  </div>
+
+
+  <h5>Мои продажи:</h5><br>
+  <div class="container" >
+    <div class="items" th:if="${!mySells.isEmpty()}">
+      <div th:each="el : ${mySells}">
+        <div th:if="${el.isPay}">
+          <br>
+            Id заказа: <h5 th:text="${el.id}" /><br>
+          <a th:href="'/item/' + ${el.item.id}" title="Открыть страницу товара" id="items-link">
+            <img th:src="${el.item.image}" th:alt="${el.item.title}" >
+            <h3 th:text="${el.item.title}" />
+            <p th:text="${el.item.info}" />
+            <span th:text="${el.item.price} + 'р.'" />
+
+            <span th:text="'Статус заказа: ' + ${el.orderStatusSet}" />
+             </a><br>
+          <!-----------------------------------------------------------------------------------------------------   -->   
+
+          <span th:if="${#strings.contains(el.orderStatusSet, 'Оплачен')}" class="cart"><br><br>
+            <a th:href="'/order/pending/' + ${el.id}">
+                <button type="submit" class="shopping-button">Начать выполнение</button>
+            </a><br><br>
+          </span>
+        <span th:if="${#strings.contains(el.orderStatusSet,'Принят')}" class="cart"><br><br>
+            <a th:href="'/order/shipped/' + ${el.id}">
+                <button type="submit" class="shopping-button">Отправить</button>
+            </a><br><br>
+        </span>
+        <span th:if="${#strings.contains(el.orderStatusSet,'Отправлен')}" class="cart"><br><br>
+            <a th:href="'/order/delivered/' + ${el.id}">
+                <button type="submit" class="shopping-button">Завершить</button>
+            </a><br><br>
+        </span>
+        <span th:if="${#strings.contains(el.orderStatusSet, 'Получен')}" class="cart"><br><br>
+            <b style="color: green">Товар доставлен получателю</b><br><br>
+        </span><br><br>
+        
+          <!-----------------------------------------------------------------------------------------------------   -->
+            <div th:if="${el.user.active}" class="online">
+                Покупатель online
+            </div>
+            <div th:if="${!el.user.active}" class="offline">
+                Покупатель offline
+            </div>
+          <p th:text="'Получатель по адресу:' + ${el.address}"/><br><br>
+            <a th:href="'/user/' + ${el.user.id}"><p>Страница покупателя</p></a>
+            <a th:href="'/user/' + ${el.user.id} + '/chat'"><p>Написать покупателю</p></a>
+
+
+    </div>
+        <div th:if="${!el.isPay}" >
+          <h5>товар еще не оплатили</h5>
+          <br>
+            Id заказа: <h5 th:text="${el.id}" /><br>
+
+            <a th:href="'/item/' + ${el.item.id}" title="Открыть страницу товара" id="item-link">
+            <img th:src="${el.item.image}" th:alt="${el.item.title}" >
+            <h3 th:text="${el.item.title}" />
+            <p th:text="${el.item.info}" /></a>
+            <span th:text="${el.item.price} + 'р.'" />
+            <span th:text="'Статус заказа: ' + ${el.orderStatusSet}" />
+            <br>
+            <div th:if="${el.user.active}" class="online">
+                Покупатель online
+            </div>
+            <div th:if="${!el.user.active}" class="offline">
+                Покупатель offline
+            </div>
+            <p th:text="'Получатель по адресу:' + ${el.address}"/><br><br>
+            <a th:href="'/user/' + ${el.user.id}"><p>Страница покупателя</p></a>
+            <a th:href="'/user/' + ${el.user.id} + '/chat'"><p>Написать покупателю</p></a>
+            
+            </div>
+      </div></div>
+  </div>
+
+
+  <div th:if="${mySells.isEmpty()}">
+    <div class="container">
+      <p>У вас ни одной продажи</p>
+    </div>
+  </div> <br>
+
+
+  <div th:replace="~{/layouts/footer :: footer}"></div>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход</title>
+    <link rel="stylesheet" th:href="@{css/style.css}">
+    <link rel="icon" href="https://img.icons8.com/?size=48&id=Oi6NZDZTenrC&format=png" type="image/x-icon">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<div th:replace="~{/layouts/header :: header}"></div>
+
+<h1>Вход</h1><br><br>
+<div class="container">
+    <form method="post" id="form" th:action="@{/login}">
+        <h5>логин:</h5>
+        <input type="text" placeholder="логин" name="username">
+        <h5>пароль:</h5>
+        <input type="password" placeholder="пароль" name="password">
+        <br><h5><div th:text="${error}" style="color: red; font-size: 15px"></div></h5>
+<!--        <div class="g-recaptcha" id="captcha" data-sitekey="6Lf7XoQpAAAAAKbvTRs9cVQRTImLbRGdvHUEHcFK"></div><br>-->
+        <button type="submit" class="block">Войти</button>
+    </form>
+</div>
+
+<br><br><br><br><br><br>
+<div th:replace="~{/layouts/footer :: footer}"></div>
+
+<!--<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>-->
+<!--<script>-->
+<!--    var onloadCallback = function() {-->
+<!--        grecaptcha.render('captcha', {-->
+<!--            'sitekey' : '6Lf7XoQpAAAAAKbvTRs9cVQRTImLbRGdvHUEHcFK'-->
+<!--        });-->
+
+<!--        $('#form').submit(function(event){-->
+<!--            var response = grecaptcha.getResponse();-->
+<!--            if(response.length == 0) {-->
+<!--                alert('Вы не прошли проверку CAPTCHA должным образом');-->
+<!--                event.preventDefault(); // Предотвращаем отправку формы-->
+<!--            }-->
+<!--        });-->
+<!--    };-->
+<!--</script>-->
+
+</body>
+</html>

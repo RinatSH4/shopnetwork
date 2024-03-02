@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Подтверждение почты</title>
+    <link rel="stylesheet" th:href="|@{css/style.css}|">
+    <link rel="icon" href="https://img.icons8.com/?size=48&id=Oi6NZDZTenrC&format=png" type="image/x-icon">
+</head>
+<body>
+<div th:replace="~{/layouts/header :: header}"></div>
+    <h1>Подтверждение почты</h1><br><br>
+    <h5>На ваш почтовый ящик отправлен код подтверждения</h5>
+    <div class="container">
+        <form method="post">
+            <h5>почта: </h5>
+            <input type="text" placeholder="email" name="email">
+            <h5>код подтвержения</h5>
+            <input type="text" placeholder="код подтверждения" name="jwt">
+            <button type="submit" id="regbutton">Подтвердить</button>
+        </form>
+    </div>
+    
+    <div th:replace="~{/layouts/footer :: footer}"></div>
+</body>
+</html>

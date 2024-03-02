@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <link rel="stylesheet" th:href="@{css/style.css}">
+    <link rel="icon" href="https://img.icons8.com/?size=48&id=Oi6NZDZTenrC&format=png" type="image/x-icon">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+
+<div th:replace="~{/layouts/header :: header}"></div>
+
+<h1>Регистрация</h1>
+<div class="container">
+    <form method="post" th:action="@{/registration}" id="regForm">
+        <h5>имя:</h5>
+        <input type="text" placeholder="имя" name="name">
+        <h5>фамилия:</h5>
+        <input type="text" placeholder="фамилия" name="surname">
+        <h5>логин:</h5>
+        <input type="text" placeholder="логин" name="username">
+        <h5>почта:</h5>
+        <input type="text" placeholder="e-mail" name="email">
+        <h5>пароль:</h5>
+        <input type="password" placeholder="пароль" name="password">
+        <h5>телефон:</h5>
+        <input type="tel" value="+7" maxlength="12" name="phone_number">
+        <h5>дата рождения:</h5>
+        <input type="date" placeholder="2023-12-12" name="birthday" value="2000-11-11"><br>
+        <h5><div th:text="${error}" style="color: red; font-size: 15px"/></h5>
+<!--        <div class="g-recaptcha" id="captcha" data-sitekey="6Lf7XoQpAAAAAKbvTRs9cVQRTImLbRGdvHUEHcFK"></div><br>-->
+        <button type="submit" class="block">Зарегистрироваться</button>
+    </form>
+</div>
+<br>
+<br>
+<br>
+<br><br>
+<br>
+<div th:replace="~{/layouts/footer :: footer}"></div>
+
+<!--<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>-->
+<!--<script>-->
+<!--    var onloadCallback = function() {-->
+<!--        grecaptcha.render('captcha', {-->
+<!--            'sitekey' : '6Lf7XoQpAAAAAKbvTRs9cVQRTImLbRGdvHUEHcFK'-->
+<!--        });-->
+
+<!--        $('#regForm').submit(function(event){-->
+<!--            var response = grecaptcha.getResponse();-->
+<!--            if(response.length == 0) {-->
+<!--                alert('Вы не прошли проверку CAPTCHA должным образом');-->
+<!--                event.preventDefault(); // Предотвращаем отправку формы-->
+<!--            }-->
+<!--        });-->
+<!--    };-->
+<!--</script>-->
+</body>
+</html>

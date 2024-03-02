@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+    <link rel="icon" href="https://img.icons8.com/?size=48&id=Oi6NZDZTenrC&format=png" type="image/x-icon">
+    <link rel="stylesheet" th:href="|@{css/style.css}|">
+</head>
+<body>
+
+<div th:replace="~{/layouts/header :: header}"></div>
+
+<main>
+    <br><br><br>
+    <h5>Мои чаты:</h5>
+    <div class="container">
+        <div th:if="${!chats.isEmpty()}">
+            <div th:each="chat : ${chats}">
+                <div style="border: 1px border gray; border-radius: 5px; padding: 10px">
+                <a th:href="'/user/' + ${chat.id} + '/chat'" title="Чат" style="color: gray">
+                    <div th:text="${chat.username}"/> Открыть чат
+                </a>
+                    <div th:if="${chat.active}" class="online">
+                        online
+                    </div>
+                    <div th:if="${!chat.active}" class="offline">
+                        offline
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            <div th:if="${chats.isEmpty()}">
+                <p>Нет чатов</p>
+            </div>
+        </div>
+    </div> <br><br>
+</main>
+
+<div th:replace="~{/layouts/footer :: footer}"></div>
+
+</body>
+</html>

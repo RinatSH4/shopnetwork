@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${item.title}"/>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" href="https://img.icons8.com/?size=48&id=Oi6NZDZTenrC&format=png" type="image/x-icon">
+</head>
+
+<body>
+
+<div th:replace="~{/layouts/header :: header}"></div>
+<main>
+        <h1>Страница товара</h1>
+        <div class="container">
+            <div class="product">
+                <div th:if="${item.verifed}">
+                    <img th:src="${item.image}" th:alt="${item.title}">
+                    <h3 th:text="${item.title}" />
+                    <p th:text="${item.info}" />
+                    <span th:text="${item.price} + 'р.'" /> <br><br>
+                    <h5 th:text="'id товара: ' + ${item.id}" /><br>
+                    <h5 th:text="'Рейтинг: ' + ${rating}" /><br>
+                    <a th:href="'/user/' + ${user.id}" style="color: green">
+                        <h5 th:text="'Продавец: ' + ${user.username}" />
+                        <div th:if="${user.active}" class="online">
+                            online
+                        </div>
+                        <div th:if="${!user.active}" class="offline">
+                            offline
+                        </div>
+                    </a><br>
+                </div>
+
+                <div th:if="${!item.verifed}">
+                    <h3>Товар на модерации</h3>
+                    <img th:src="${item.image}" th:alt="${item.title}">
+                    <h3 th:text="${item.title}" />
+                    <p th:text="${item.info}" />
+                </div>
+            </div>
+        </div>
+
+
+<div class="container">
+    <span sec:authorize="isAuthenticated()" class="cart">
+            <span th:if="${user.username == #authentication.principal.username}" class="cart"><br><br>
+                <a th:href="'/item/' + ${item.id} + '/update'"><button type="submit">Изменить</button></a><br>
+                <a th:href="'/item/' + ${item.id} + '/delete'"><button type="submit">Удалить</button></a><br>
+            </span>
+            <span sec:authorize="hasAuthority('ADMIN')" class="cart"><br><br>
+                <a th:href="'/item/' + ${item.id} + '/delete'"><button type="submit">Удалить</button></a><br>
+                <span th:if="${!item.verifed}" class="cart">
+                    <a th:href="'/item/' + ${item.id} + '/verifed'"><button type="submit">Одобрить</button></a><br>
+                </span>
+            </span>
+            <span sec:authorize="hasAuthority('MODERATOR')" class="cart"><br><br>
+                <a th:href="'/item/' + ${item.id} + '/delete'"><button type="submit">Удалить</button></a><br>
+                <span th:if="${!item.verifed}" class="cart">
+                    <a th:href="'/item/' + ${item.id} + '/verifed'"><button type="submit">Одобрить</button></a><br>
+                </span>
+            </span>
+           <span th:if="${item.verifed}" class="cart">
+            <span th:if="${user.username != #authentication.principal.username}" class="cart"><br><br>
+                <a th:href="'/item/' + ${item.id} + '/buy'"><button type="submit">Добавить в корзину</button></a><br>
+            </span>
+           </span>
+    </span>
+</div>
+
+    <div class="container" th:if="${item.verifed}">
+        <a th:href="'/item/' + ${item.id} + '/chat'" title="Открыть чат товара">
+            <button type="submit">Чат товара</button>
+        </a>
+    </div>
+    <div th:if="${item.verifed}" >
+    <div class="container">
+        <span sec:authorize="isAuthenticated()" class="cart">
+            <div th:if="${isHaveRating}" class="container">
+                <form method="post" th:action="@{'/item/' + ${item.id} + '/rating'}">
+                    <input type="number" placeholder="5" name="ball">
+                    <button type="submit">Оценить</button>
+                </form>
+            </div>
+                <br>
+            <div th:if="${isHaveReview}" class="container">
+                <h2>Добавть отзыв</h2>
+                    <form method="post" th:action="@{'/item/' + ${item.id} +'/review/add'}">
+                        <textarea rows="10" cols="40" name="rew" placeholder="коментарий" id="textarea"></textarea>
+                        <button type="submit" id="regbutton" class="block">Добавить отзыв</button>
+                    </form>
+            </div>
+        </span>
+    </div>
+
+            <h2>Отзывы:</h2>
+        <div class="container">
+            <div th:if="${!reviews.isEmpty()}">
+                <div th:each="review : ${reviews}">
+                    <a th:href="'/user/' + ${review.user.id} "><img th:src="${review.user.photo}" class="avatar"/></a>
+                    <div th:if="${review.user.active}" class="online">
+                        online
+                    </div>
+                    <div th:if="${!review.user.active}" class="offline">
+                        offline
+                    </div>
+                    <b th:text="${review.username}" style="color: rgb(124, 40, 40);"/><br>
+                    <p th:text="${review.text}" /> <br><br>
+                </div>
+            </div>
+        </div>
+</div>
+</main>
+    <div th:replace="~{/layouts/footer :: footer}"></div>
+
+</body>
+</html>

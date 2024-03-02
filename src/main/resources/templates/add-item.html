@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление товара</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" href="https://img.icons8.com/?size=48&id=Oi6NZDZTenrC&format=png" type="image/x-icon">
+</head>
+<body>
+
+<div th:replace="~{/layouts/header :: header}"></div>
+
+
+<h4>Добавление товара</h4><br>
+<div class="container">
+    <form method="post" th:action="@{/item/add}" enctype="multipart/form-data">
+        <h5>название:</h5>
+        <input type="text" placeholder="название" name="title">
+        <h5>описание товара:</h5>
+        <textarea rows="10" name="info" placeholder="описание" id="textarea"></textarea>
+        <h5>ссылка на фото:</h5>
+        <input type="text" placeholder="http://image.jpg" name="image">
+        <h5>цена:</h5>
+        <input type="number" placeholder="000" name="price">
+        <br>
+        <button type="submit" id="regbutton" class="block">Добавить товар</button>
+    </form>
+</div>
+<br><br><br><br><br><br>
+<div th:replace="~{/layouts/footer :: footer}"></div>
+</body>
+</html>

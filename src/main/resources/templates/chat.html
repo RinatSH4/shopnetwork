@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>чат</title>
+  <link rel="stylesheet" th:href="|@{/css/style.css/}|">
+  <link rel="icon" href="https://img.icons8.com/?size=48&id=Oi6NZDZTenrC&format=png" type="image/x-icon">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+  <script type="text/javascript">
+    var stompClient = null;
+
+    function setConnected(connected) {
+                    document.getElementById('connect').disabled = connected;
+                    document.getElementById('disconnect').disabled = !connected;
+                    document.getElementById('conversationDiv').style.visibility
+                      = connected ? 'visible' : 'hidden';
+                    document.getElementById('response').innerHTML = '';
+                }
+
+                function connect() {
+                    var socket = new SockJS('/chat');
+                    stompClient = Stomp.over(socket);
+                    stompClient.connect({}, function(frame) {
+                        setConnected(true);
+                        console.log('Connected: ' + frame);
+                        stompClient.subscribe('/topic/messages', function(messageOutput) {
+                            showMessageOutput(JSON.parse(messageOutput.body));
+                        });
+                    });
+                    scrollToBottom();
+                    checkSocketConnection();
+                }
+
+                function disconnect() {
+                    if(stompClient != null) {
+                        stompClient.disconnect();
+                    }
+                    setConnected(false);
+                    checkSocketConnection();
+                }
+
+                function sendMessage() {
+                  var chatId = document.getElementById('chatId').value;
+                    var from = document.getElementById('im').value;
+                    var image = document.getElementById('image').value;
+                    var to = document.getElementById('to').value;
+                    var text = document.getElementById('text').value;
+                    
+                  
+                    stompClient.send("/app/chat/" + chatId, {},
+                    JSON.stringify({
+                        'chatId': chatId,
+                        'from': from,
+                        'image': image,
+                        'to': to,
+                        'text': text,
+                        'time': 'time'
+                    }));
+
+                    const messageInput = document.getElementById('text');
+                    const message = messageInput.value;
+                    messageInput.value = '';
+                    scrollToBottom();
+                    checkSocketConnection();
+                }
+
+              function showMessageOutput(messageOutput) {
+                const responseDiv = document.createElement('div');
+                responseDiv.id = 'response';
+                responseDiv.classList.add('message-container'); // Добавляем класс 'message-container'
+
+                const imageElement = document.createElement('img');
+                imageElement.src = messageOutput.image;
+                imageElement.classList.add('avatar');
+                responseDiv.appendChild(imageElement);
+
+                const messageContentDiv = document.createElement('div');
+                messageContentDiv.classList.add('message-content');
+
+                const senderParagraph = document.createElement('b');
+                senderParagraph.textContent = messageOutput.from;
+                messageContentDiv.appendChild(senderParagraph);
+
+
+                const timeParagraph = document.createElement('p');
+                const messageTime = new Date(messageOutput.time);
+                const formattedTime = `${messageTime.getDate().toString().padStart(2, '0')}.${(messageTime.getMonth() + 1).toString().padStart(2, '0')}.${messageTime.getFullYear()} ${messageTime.getHours().toString().padStart(2, '0')}:${messageTime.getMinutes().toString().padStart(2, '0')}`;
+                timeParagraph.textContent = formattedTime;
+                timeParagraph.classList.add('time');
+                messageContentDiv.appendChild(timeParagraph);
+
+
+                const messageParagraph = document.createElement('p');
+                messageParagraph.textContent = messageOutput.text;
+                messageParagraph.style.wordWrap = 'break-word';
+
+                messageContentDiv.appendChild(messageParagraph);
+
+                responseDiv.appendChild(messageContentDiv);
+
+                if (messageOutput.from === document.getElementById('im').value) {
+                  responseDiv.classList.add('message', 'my-message');
+                } else {
+                  responseDiv.classList.add('message', 'other-message');
+                }
+
+                // Найдите элемент, в который вы хотите вставить responseDiv
+                const targetElement = document.querySelector('.onlinechat');
+
+                // Вставляем responseDiv внутрь целевого элемента
+                if (targetElement) {
+                  targetElement.appendChild(responseDiv);
+                }
+                scrollToBottom();
+                checkSocketConnection();
+              }
+
+              const chatContainer = document.getElementById('.chat-container');
+
+                // Функция для прокрутки вниз
+              function scrollToBottom() {
+                var chatContainer = document.querySelector('.chat-container');
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+              }
+        
+
+            messageInput.addEventListener('keypress', function(event) {
+              if (event.key === 'Enter') {
+                sendMessage();
+              }
+            });
+
+
+            const connectedElement = document.getElementById('connected');
+
+            // Найти кнопку отправки сообщения
+            const sendMessageButton = document.getElementById('sendMessage');
+           // Функция для проверки подключения и активации кнопки отправки сообщения
+            function checkSocketConnection() {
+            if (stompClient && stompClient.connected) {
+              connectedElement.innerText = ''; // Очищаем текст "соединение"
+              sendMessageButton.disabled = false; // Активируем кнопку отправки сообщения
+            } else {
+              connectedElement.innerText = 'соединение'; // Выводим текст "соединение"
+              sendMessageButton.disabled = true; // Делаем кнопку отправки сообщения неактивной
+            }
+
+            checkSocketConnection();
+}
+
+
+  </script>
+
+</head>
+<body onload="connect()">
+<div th:replace="~{/layouts/header :: header}"></div>
+<h1>Чат с пользователем <b th:text="${user.username}"/></h1>
+<div th:if="${user.active}" class="online">
+  online
+</div>
+<div th:if="${!user.active}" class="offline">
+  offline
+</div>
+<br>
+<div id="connected"></div>
+<br>
+<div class="container" style="margin-bottom: 10px;">
+  <div class="chat-container">
+    <div th:if="${!messages.isEmpty()}">
+      <div th:each="message : ${messages}">
+        <div th:if="${message.sender.id == im.id}">
+          <div contenteditable="false">
+            <div class="message my-message">
+              <a th:href="'/user/' + ${message.sender.id}" title="открыть страницу пользователя">
+              <img th:src="${message.sender.photo}" class="avatar"/>
+              </a>
+              <div class="message-content">
+                <b th:text="${message.sender.username}" />
+                <p th:text="${#temporals.format(message.time, 'dd.MM.yyyy HH:mm')}" class="time"/>
+                <p th:text="${message.content}" />
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <div th:if="${message.sender.id != im.id}">
+          <div contenteditable="false">
+            <div class="message other-message">
+              <a th:href="'/user/' + ${message.sender.id}" title="открыть страницу пользователя">
+                <img th:src="${message.sender.photo}" class="avatar"/>
+              </a>
+              <div class="message-content">
+                <b th:text="${message.sender.username}" />
+                <p th:text="${#temporals.format(message.time, 'dd.MM.yyyy HH:mm')}" class="time"/>
+                <p th:text="${message.content}" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="onlinechat">
+      <div id="response"></div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="container">
+  <div class="input-container" id="conversationDiv">
+      <input type="text" id="text" class="message-input">
+      <button id="sendMessage" class="send-btn" onclick="sendMessage();">Отправить</button>
+  </div>
+</div>
+
+<div class="container" style="display:none; visibility: none;">
+  <button id="connect" onclick="connect();">Отобразить</button><br><br>
+  <button id="disconnect" disabled="disabled" onclick="disconnect();">
+      Скрыть
+  </button>
+</div>
+
+<div>
+  <input type="text" id="image" th:value="${im.photo}" style="display:none; visibility: none;"/>
+  <input type="text" id="im" th:value="${im.username}" style="display:none; visibility: none;"/>
+  <input type="number" id="chatId" th:value="${chatId}" style="display:none; visibility: none;"/>
+  <input type="text" id="to" th:value="${user.username}" style="display:none; visibility: none;"/>
+</div>
+<br><br><br><br>
+
+
+<div th:replace="~{/layouts/footer :: footer}"></div>
+</body>
+</html>

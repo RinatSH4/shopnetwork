@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Панель администратора</title>
+  <link rel="stylesheet" th:href="|@{css/style.css}|">
+    <link rel="icon" href="https://img.icons8.com/?size=48&id=Oi6NZDZTenrC&format=png" type="image/x-icon">
+</head>
+<body>
+
+<div th:replace="~{/layouts/header :: header}"></div>
+
+<main>
+<h2>Панель администратора</h2>
+  <br><br>
+<div class="container">
+  <div th:if="${!users.isEmpty()}">
+    <div th:each="user : ${users}">
+        <div style="background: #ffe4e0; padding: 5px; margin: 5px; border-radius: 5px; width: 300px">
+        <a th:href="'/user/' + ${user.id}" style="color: green">
+        <p th:text="${user.username}" style="color: brown;" />
+        <p th:text="${user.name}" />
+        <p th:text="${user.surname}" />
+        <p th:text="${user.roles}" />
+        </a>
+            <div th:if="${user.active}" class="online">
+                online
+            </div>
+            <div th:if="${!user.active}" class="offline">
+                offline
+            </div>
+
+        <th:block th:if="${not #strings.contains(user.roles, 'ADMIN')}">
+          <a th:href="'user/' + ${user.id} + '/setadmin'">
+            <button type="submit">Назначить админом</button>
+          </a>
+        </th:block>
+
+        <th:block th:if="${not #strings.contains(user.roles, 'MODERATOR')}">
+          <a th:href="'user/' + ${user.id} + '/setmoder'">
+            <button type="submit">Назначить модератором</button>
+          </a>
+        </th:block>
+
+        <th:block th:if="${not #strings.contains(user.roles, 'USER')}">
+          <a th:href="'user/' + ${user.id} + '/setuser'">
+            <button type="submit">Разжаловать</button>
+          </a>
+        </th:block>
+
+        <th:block th:if="${not #strings.contains(user.roles, 'BANNED')}">
+          <a th:href="'user/' + ${user.id} + '/ban'">
+            <button type="submit">Забанить</button>
+          </a>
+        </th:block>
+      </div>
+      <br>
+    </div>
+  </div>
+</div>
+
+<div th:replace="~{/layouts/footer :: footer}"></div>
+</main>
+</body>
+</html>

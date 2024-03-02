@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Поиск</title>
+  <link rel="icon" href="https://img.icons8.com/?size=48&id=Oi6NZDZTenrC&format=png" type="image/x-icon">
+  <link rel="stylesheet" th:href="|@{css/style.css}|">
+</head>
+<body>
+
+<div th:replace="~{/layouts/header :: header}"></div>
+
+<main>
+  <h2>Вот что нашлось по вашему запросу</h2>
+    <div class="items" th:if="${!items.isEmpty()}">
+      <div th:each="el : |${items}|">
+
+          <a th:href="'/item/' + ${el.id}" title="Открыть страницу товара" id="item_link">
+          <img th:src="${el.image}" th:alt="${el.title}">
+          <h3 th:text="${el.title}" />
+          <p th:text="${el.info}" />
+          <span th:text="${el.price} + 'р.'" />
+        </a>
+
+      </div>
+    </div>
+    <div th:if="${items.isEmpty()}" class="block">
+      <p>По вашему запросу ничего не найдено</p>
+    </div>
+  </div>
+</main>
+
+<div th:replace="~{/layouts/footer :: footer}"></div>
+
+</body>
+</html>

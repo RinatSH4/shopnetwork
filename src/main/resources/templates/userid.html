@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Страница пользователя</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="icon" href="https://img.icons8.com/?size=48&id=Oi6NZDZTenrC&format=png" type="image/x-icon">
+</head>
+
+<body>
+
+<div th:replace="~{/layouts/header :: header}"></div>
+
+<main>
+    <h1 th:text="'Страница пользователя: ' + ${user.username}" /><br><br>
+    <div class="container">
+        <img th:src="${user.photo}" class="product" style="height: 300px; width: 300px; overflow: auto;"><br><br>
+    </div>
+    <h2 th:text="${user.name} + ' ' + ${user.surname}"/>
+    <div class="container">
+        <div th:if="${user.active}" class="online">online</div>
+        <div th:if="${!user.active}" class="offline">offline</div>
+    </div>
+<!--если он не в друзьях или я у него не в подписчиках-->
+      <div class="container">
+        <div th:if="${not user.friends.contains(im) and not user.followers.contains(im) and not im.followers.contains(user)}">
+            <a th:href="'/addfriend/' + ${user.id}" style="color: green">
+                <button type="submit">добавить в друзья</button>
+            </a>
+        </div>
+        <br>
+        <div th:if="${user.friends.contains(im)}">
+            <div class="container">
+                <br>
+                <p>Пользователь у вас в друзьях</p>
+            </div>
+        </div>
+      </div>
+        <div th:if="${user.followers.contains(im)}">
+            <div class="container">
+                <br>
+                <p>Заявка в друзья отправлена</p>
+            </div>
+        </div>
+    <br>
+        <div th:if="${im.followers.contains(user)}">
+            <div class="container">
+               <br>
+                <a th:href="'/user/' + ${user.id} + '/addfriend'" style="color: green">
+                    <button type="submit">принять в друзья</button>
+                </a>
+            </div>
+        </div>
+        <br>
+    </div><br><br>
+    <div class="container">
+    <a th:href="'/user/' + ${user.id} + '/chat'" title="Чат" style="color: green">
+        Написать пользователю
+    </a>
+    </div>
+    <br>
+
+        <div class="addmoney">
+        <form th:action="'/user/' + ${user.id} + '/sendMoney'" method="post" class="moneyform">
+            <input type="number" placeholder="1000.0р" name="summ" class="moneyinput">
+            <button type="submit" class="moneybutton">Перевести</button>
+        </form>
+        </div>
+    <br>
+
+    <h5>Друзья пользователя:</h5><br>
+    <div class="container">
+        <div th:if="${!user.friends.isEmpty()}" class="user-container">
+            <div th:each="friend : ${user.friends}" class="user-block">
+            <a th:href="'/user/' + ${friend.id}" title="Открыть страницу пользователя">
+                <img th:src="${friend.photo}" alt="Фото пользователя" class="profile-photo" />
+                <h6 th:text="${friend.name} + ' ' + ${friend.surname}" />
+                <div th:if="${friend.active}" class="online">
+                    online
+                </div>
+                <div th:if="${!friend.active}" class="offline">
+                    offline
+                </div>
+            </a>
+        </div>
+    </div>
+    <div th:if="${user.friends.isEmpty()}">
+        <div class="container">
+            <p>нет друзей</p>
+        </div>
+    </div>
+    </div><br><br>
+
+    <h5>Подписчики пользователя:</h5><br>
+    <div class="container">
+        <div th:if="${!user.followers.isEmpty()}" class="user-container">
+            <div th:each="follower : ${user.followers}" class="user-block">
+                <a th:href="'/user/' + ${follower.id}" title="Открыть страницу пользователя">
+                    <img th:src="${follower.photo}" alt="Фото пользователя" class="profile-photo" />
+                    <h6 th:text="${follower.name} + ' ' + ${follower.surname}"/>
+                    <div th:if="${follower.active}" class="online">
+                        online
+                    </div>
+                    <div th:if="${!follower.active}" class="offline">
+                        offline
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div th:if="${user.followers.isEmpty()}">
+            <div class="container">
+                <p>нет подписчиков</p>
+            </div>
+        </div>
+    </div><br><br>
+
+    <h1>Товары пользовтеля</h1>
+    <div class="container">
+        <div class="items" th:if="${!user.items.isEmpty()}">
+            <div th:each="el : |${user.items}|">
+
+                <a th:href="'/item/' + ${el.id}" title="Открыть страницу товара" id="item_link">
+                    <img th:src="${el.image}" th:alt="${el.title}">
+                    <h3 th:text="${el.title}" />
+                    <p th:text="${el.info}" />
+                    <span th:text="${el.price} + 'р.'" />
+                </a>
+                </div>
+            </div>
+
+        <div th:if="${user.items.isEmpty()}" class="block">
+            <p>У пользователя нет товаров</p>
+        </div>
+    </div><br><br>
+
+
+    <div th:replace="~{/layouts/footer :: footer}"></div>
+
+</main>
+</body>

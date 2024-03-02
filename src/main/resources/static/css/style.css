@@ -1,0 +1,589 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400;600;700&family=Oxygen:wght@300&display=swap');
+* {
+    padding: 0px;
+    margin: 0px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+  .addmoney {
+      text-align: center;
+      margin-top: 20px; /* Отступ сверху для центрирования блока */
+  }
+
+  .balance {
+      display: inline-block;
+      margin-right: 10px;
+      font-size: 1.2em; /* Увеличим размер текста для баланса */
+      color: green; /* Цвет текста */
+  }
+
+  .moneyform {
+      display: inline-block;
+      vertical-align: top; /* Выравнивание элементов по верхнему краю */
+  }
+
+  .moneyinput {
+      width: 120px;
+      height: 30px;
+      padding: 5px;
+      margin-right: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc; /* Стилизуем рамку */
+  }
+
+  .moneybutton {
+      width: auto;
+      padding: 5px 15px;
+      height: 40px;
+      font-size: 1em;
+      color: white;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s; /* Плавное изменение цвета фона при наведении */
+  }
+
+  .moneybutton:hover {
+      background-color: #0056b3; /* Цвет фона при наведении */
+  }
+
+
+header {
+    height: 50px;
+    width: 100%;
+    background-color: #1e1e1e;
+    display: flex;
+    justify-content: space-between;
+}
+
+main {
+    margin-bottom: 100px;
+}
+
+form input, form textarea {
+    width: 350px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    resize: none;
+}
+
+form button, button {
+    margin-top: 20px;
+    padding: 10px 25px;
+    border: 0;
+    border-radius: 3px;
+    color: #fff;
+    cursor: pointer;
+    background: #cb5e49;
+    align-items: center;
+}
+
+form button:hover, button:hover {
+    background: #964434;
+}
+
+.logo {
+    justify-content: center;
+    float: left;
+    margin-top: 10px;
+    font-size: 30px;
+    font-weight: 900;
+    color: white;
+
+}
+
+.links {
+    justify-content: center;
+    float: left;
+    margin-right: 50px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+a {
+    text-decoration: none;
+    color: #ffffff;
+    margin-left: 10px;
+    transition: color 500ms ease;
+}
+
+img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+}
+
+a:hover {
+    color: #989898;
+    transition: color 500ms ease;
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.items {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 5%;
+    padding-right: 5%;
+    justify-content: center;
+}
+
+.items > div {
+    float: left;
+    margin-bottom: 30px;
+    margin-left: 50px;
+    margin-top: 50px;
+    box-sizing: border-box;
+    padding: 5px;
+    width: 320px;
+    border: 1px dotted gray;
+    border-radius: 10px;
+}
+
+.items a {
+    float: left;
+    height: 250px;
+    width: auto;
+    height: auto;
+    color: black;
+}
+
+.product {
+    display: flex;
+    flex-wrap: wrap;
+    padding-left: 5%;
+    padding-right: 5%;
+    justify-content: center;
+    margin-bottom: 180px;
+}
+
+.product > div
+{
+    margin: 20px;
+    box-sizing: border-box;
+    padding: 5px;
+    width: 50%px;
+}
+
+span {
+    background: #146E00;
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: auto;
+}
+
+.cart {
+    background: none;
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: auto;
+}
+
+.online {
+    font-size: 10px;
+    text-align: center;
+    color: green;
+    margin: auto;
+    margin-top: 2px;
+    margin-bottom: 5px;
+}
+
+.offline {
+    font-size: 10px;
+    text-align: center;
+    color: red;
+    margin: auto;
+    margin-top: 2px;
+    margin-bottom: 5px;
+}
+
+
+h1 {
+    padding-top: 50px;
+    text-align: center;
+    font-size: 25px;
+}
+
+h2 {
+    padding-top: 50px;
+    text-align: center;
+    font-size: 18px;
+}
+
+h4 {
+    padding-top: 50px;
+    text-align: center;
+    font-size: 17px;
+    color: #6f3131;
+    width: 100%;
+}
+
+h5 {
+    text-align: center;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+}
+
+input {
+    box-sizing: border-box;
+    width: 300px;
+    border: 1px solid #bdbdbd;
+    margin: 5px;
+    padding: 5px;
+    font-size: 15px;
+}
+
+p {
+    color: black;
+}
+
+.block {
+  margin: auto;
+  display: flex; /* используем flexbox */
+  justify-content: center; /* центрируем по горизонтали */
+  align-items: center; /* центрируем по вертикали */
+}
+
+.search form {
+    display: flex;
+    align-items: baseline;
+    margin-top:-10px;
+}
+
+.search input[type="text"] {
+    width: 250px;
+    margin-right: 10px;
+}
+
+.search button {
+    border: 1px dotted white;
+    text-align: center;
+}
+
+.avatar {
+  width: 32px; /* Ширина чуть больше кнопки */
+  height: 32px; /* Высота чуть больше кнопки */
+  object-fit: cover; /* Масштабирование изображения с обрезкой, чтобы оно заполняло контейнер */
+  border-radius: 50%; /* Превращаем картинку в круг */
+}
+
+
+footer {
+    height: 50px;
+    width: 100%;
+    background-color: #1e1e1e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    position: fixed;
+    bottom: 0;
+}
+
+.footer-text {
+    text-align: center;
+}
+
+
+
+
+.chat-container {
+    width: 50%;
+    height: 600px;
+    background-color: #f5f5f5;
+    overflow-y: scroll;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .message-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+
+  .my-message {
+    background-color: #dcf8c6;
+    color: #000;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 400px;
+    margin-right: 20px;
+    margin-left: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .my-message .avatar {
+    display: none;
+  }
+
+  .other-message {
+    background-color: #ffffff;
+    color: #000;
+    border-radius: 10px;
+    padding: 10px;
+    max-width: 400px;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .message-content {
+    display: inline-block;
+  }
+
+  .time {
+    font-size: 10px;
+    color: #555;
+    float: right;
+    margin-left: 150px;
+  }
+
+  .input-container {
+    width: 50%;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+}
+
+.message-input {
+    flex: 1;
+    padding: 10px;
+    margin-right: 5px;
+}
+
+.send-btn {
+    width: 100px;
+    padding: 10px;
+    background-color: #128C7E;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 0;
+}
+
+
+  .send-btn:hover {
+    background-color: #075e54;
+  }
+
+
+
+
+.user-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.user-block {
+    margin: 10px;
+    text-align: center;
+}
+
+.profile-photo {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; /* Делаем фото круглым */
+}
+
+h6 {
+    margin-top: 5px;
+    font-size: 10px;
+    color: #2b2c2c;
+}
+
+.add-friend-link {
+    color: rgb(228, 108, 47);
+}
+
+#items-link {
+ all: unset;
+}
+
+
+.menu-icons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.menu_icon {
+    margin: 0 10px;
+}
+
+.cart_icon {
+    margin: 0 10px;
+    filter: brightness(0) invert(1); /* Чтобы иконка корзины была красного цвета */
+}
+
+.cart_link {
+    position: relative;
+}
+
+.cart_icon {
+    margin: 0 10px;
+    filter: brightness(0) invert(1); /* Чтобы иконка корзины была красного цвета */
+    position: relative; /* Добавляем позиционирование для корзины */
+}
+
+.cart_count {
+    position: absolute;
+    top: 50%; /* Располагаем кружок по вертикали посередине */
+    right: 25px; /* Сдвигаем кружок на 55 пикселей вправо */
+    transform: translate(50%, -50%); /* Сдвигаем кружок на половину своей ширины вправо и на половину своей высоты вверх */
+    background-color: red;
+    color: white;
+    padding: 3px;
+    border-radius: 50%;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+
+.menu-icons img {
+    width: auto;
+    height: 30px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+
+@media only screen and (max-width: 1250px) {
+/* Стили для узких мониторово устройств с максимальной шириной экрана 1024px */
+header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+    width: auto;
+ }
+ .logo, .search, .links {
+    margin-bottom: 10px; /* Добавляет отступ снизу между элементами */
+    text-align: center;
+    margin-right: 0;
+ }
+
+ .chat-container {
+    margin: auto;
+    height: 400px;
+    padding: 5px;
+    width: 90%;
+
+}
+
+.input-container {
+    width: 90%;
+}
+
+.my-message {
+ max-width: 400px;
+}
+
+.other-message {
+ max-width: 400px;
+}
+
+}
+
+@media only screen and (max-width: 600px) {
+    header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: auto;
+        width: auto;
+     }
+     .logo, .search, .links {
+        margin-bottom: 10px; /* Добавляет отступ снизу между элементами */
+        text-align: center;
+        margin-right: 0;
+     }
+
+   .items > div {
+      width: auto; /* Изменение ширины блоков с товарами на мобильных устройствах */
+      margin-left: auto;
+      width: auto;
+   }
+
+   .input-container {
+       display: inline-block;
+       margin: auto;
+       width: 95%;
+   }
+
+   .chat-container {
+       margin: auto;
+       height: 300px;
+       padding: 5px;
+       width: 90%;
+   }
+
+   .my-message {
+    max-width: 250px;
+   }
+
+   .other-message {
+    max-width: 250px;
+   }
+
+   .time {
+    font-size: 8px;
+    color: #555;
+    float: right;
+    margin-left: 40px;
+  }
+
+
+
+   .menu-icons {
+           flex-wrap: wrap;
+           justify-content: center;
+       }
+
+       .menu_icon, .cart_icon {
+           margin: 10px;
+       }
+
+       .menu-icons img {
+           width: auto;
+           height: 25px;
+           margin-left: 10px;
+           margin-right: 10px;
+       }
+
+       .cart_count {
+                  color: white;
+                  padding: 2px;
+                  font-size: 7px;
+                  right: 10px;
+              }
+}

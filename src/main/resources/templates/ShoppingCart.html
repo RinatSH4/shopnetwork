@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+    <link rel="stylesheet" th:href="@{css/style.css}">
+    <link rel="icon" href="https://img.icons8.com/?size=48&id=Oi6NZDZTenrC&format=png" type="image/x-icon">
+</head>
+
+<body>
+
+<div th:replace="~{/layouts/header :: header}"></div>
+
+<h1>Корзина</h1><br>
+<main>
+        <div class="container">
+            <div class="items" th:if="${!ShoppingCart.isEmpty()}">
+                <div th:each="el : ${ShoppingCart}">
+                    <a th:href="'/item/' + ${el.id}" title="Открыть страницу товара" id="item_link">
+                        <img th:src="${el.image}" th:alt="${el.title}">
+                        <h3 th:text="${el.title}" />
+                        <p th:text="${el.info}" />
+                        <span th:text="${el.price} + 'р.'" />
+                        <a th:href="'/ShoppingCart/delete/' + ${el.id}"><button type="submit">удалить</button></a>
+                    </a>
+                </div>
+                <div class="buy">
+                <a th:href="'/ShoppingCart/deleteall'"><button type="submit">Очистить корзину</button></a>
+                    <br><br><br><br><h4 th:text="'Итого: ' + ${summ}" /> <br><br>
+                <p><h2>Оформление заказа</h2></p>
+
+
+                <form method="post" th:action="@{/ShoppingCart}">
+                    <h5>Адрес доставки:</h5>
+                    <textarea rows="10" name="address" id="textarea" style="width: 275px"></textarea>
+                    <button type="submit" id="regbutton">Заказать</button>
+                </form>
+                </div>
+            </div>
+            <div th:if="${ShoppingCart.isEmpty()}">
+                <p>Ваша корзина пуста</p>
+            </div> <br>
+        </div>
+    <br> <br>
+
+
+
+</main>
+
+<div th:replace="~{/layouts/footer :: footer}"></div>
+
+</body>
+</html>

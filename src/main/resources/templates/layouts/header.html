@@ -1,0 +1,48 @@
+<header xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns="http://www.w3.org/1999/html"
+        th:fragment="header">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <div class="logo">
+        <a href="/" title="Главная">Bitambala</a>
+    </div>
+
+    <div class="search">
+        <form th:action="@{/search-item}" method="get">
+            <input type="text" name="search" placeholder="введите товар для поиска"><button type="submit" style="background: #1e1e1e">Искать</button>
+        </form>
+    </div>
+
+    <div class="links">
+            <a href="/">Главная</a>
+        <span sec:authorize="isAuthenticated()" class="cart">
+            <a href="/item/add">Добавить товар</a>
+            <a href="/user">Профиль</a>
+            <a href="/ShoppingCart">Корзина
+                <div th:if="${cartCount != 0}" style="display: inline;">
+                    <span th:text="'(' + ${cartCount} + ')'" style="all: unset"/>
+                </div>
+            </a>
+            <span sec:authorize="hasAuthority('ADMIN')" class="cart">
+            <a href="/adminpanel">Админ</a>
+        </span>
+        <span sec:authorize="hasAuthority('ADMIN')" class="cart">
+            <a href="/verifed-items">Проверить товары
+            <div th:if="${vefifedItemsFalse != 0}" style="display: inline;">
+                    <span th:text="'(' + ${vefifedItemsFalse} + ')'" style="all: unset"/>
+                </div>
+            </a>
+        </span>
+        <span sec:authorize="hasAuthority('MODERATOR')" class="cart">
+            <a href="/verifed-items">Проверить товары
+                <div th:if="${vefifedItemsFalse != 0}" style="display: inline;">
+                    <span th:text="'(' + ${vefifedItemsFalse} + ')'" style="all: unset"/>
+                </div>
+            </a>
+        </span>
+        </span>
+        <span sec:authorize="!isAuthenticated()" class="cart">
+            <a href="/login">Вход</a>
+            <a href="/registration">Регистрация</a>
+        </span>
+    </div>
+</header>

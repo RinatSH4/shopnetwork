@@ -1,0 +1,26 @@
+<footer xmlns:th="http://www.thymeleaf.org"
+        th:fragment="footer">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <div sec:authorize="!isAuthenticated()" class="footer-text">
+        &#169; 2024 <br>
+        Bitambala
+    </div>
+
+<div class="footer-text">
+    <div sec:authorize="isAuthenticated()" class="menu-icons">
+        <a href="/" title="главная"><img src="/images/home.png" class="menu_icon"></a>
+        <a href="/friends" title="друзья"><img src="/images/friends.png" class="menu_icon"></a>
+        <a href="/mychats" title="чаты"><img src="/images/mychats.png" class="menu_icon"></a>
+        <a href="/item/add" title="добавить товар"><img src="/images/additem.png" class="menu_icon"></a>
+        <a href="/user" title="профиль"><img src="/images/profile.png" class="menu_icon"></a>
+        <a href="/ShoppingCart" title="корзина" class="cart_link">
+            <img src="/images/shoppingCart.png" class="cart_icon">
+            <div th:if="${cartCount != 0}" class="cart_count">
+                <span th:text="${cartCount}" class="cart"/>
+            </div>
+        </a>
+    </div>
+</div>
+
+
+</footer>

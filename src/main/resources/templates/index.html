@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+    <link rel="icon" href="https://img.icons8.com/?size=48&id=Oi6NZDZTenrC&format=png" type="image/x-icon">
+    <link rel="stylesheet" th:href="|@{css/style.css}|">
+    <meta name="enot" content="16fb1b59">
+</head>
+<body>
+
+<div th:replace="~{/layouts/header :: header}"></div>
+
+<main>
+        <h2>Добро пожаловать на bitambala</h2>
+        <div class="container">
+            <div class="items" th:if="${!items.isEmpty()}">
+                <div th:each="el : ${items}">
+                    <a th:href="'/item/' + ${el.id}" title="Открыть страницу товара" id="item_link">
+                        <img th:src="${el.image}" th:alt="${el.title}">
+                        <h3 th:text="${el.title}" />
+                        <p th:text="${el.info}" />
+                        <span th:text="${el.price} + 'р.'" />
+                    </a>
+                </div>
+            </div>
+            <div th:if="${items.isEmpty()}" class="block">
+                <p>Нет товаров</p>
+            </div>
+        </div>
+    </main>
+
+    <div th:replace="~{/layouts/footer :: footer}"></div>
+
+</body>
+</html>
