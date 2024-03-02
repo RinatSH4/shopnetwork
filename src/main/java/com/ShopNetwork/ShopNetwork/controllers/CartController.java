@@ -108,13 +108,14 @@ public class CartController {
         Orders order = ordersRepository.findById(id).orElseGet(Orders::new);
         User user = userRepository.findByUsername(userDetails.getUsername());
         if(order.getUser().equals(user)) {
-            order.setPay(true);
-            Set<OrderStatus> status = new HashSet<>();
-            status.add(OrderStatus.PAID); //добавлеем новый статус
-            order.setOrderStatusSet(status);
+
 
             double itemPrice = order.getItem().getPrice(); //получаем цену для оплаты
             if (user.getBalance() >= itemPrice) {
+                order.setPay(true);
+                Set<OrderStatus> status = new HashSet<>();
+                status.add(OrderStatus.PAID); //добавлеем новый статус
+                order.setOrderStatusSet(status);
                 user.setBalance(user.getBalance() - itemPrice); //списываем деньги у пользователя за товар
                 order.setSumm(itemPrice); //добавляем сумму к оплаченному товару
             }
