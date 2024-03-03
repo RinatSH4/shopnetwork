@@ -155,7 +155,7 @@ a:hover {
 .items > div {
     float: none;
     margin-bottom: 30px;
-    margin: 20px;
+    margin: 30px;
     margin-top: 50px;
     box-sizing: border-box;
     padding: 5px;
@@ -560,7 +560,7 @@ header {
     .items > div {
         width: 100%;
         max-width: 300px;
-        margin: 10px auto; /* изменено на auto */
+        margin: 30px auto; 
         margin-bottom: 40px; /* изменено на 20px */
     }
     
