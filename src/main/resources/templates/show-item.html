@@ -47,9 +47,7 @@
     <span sec:authorize="isAuthenticated()" class="cart">
             <span th:if="${user.username == #authentication.principal.username}" class="cart"><br><br>
                 <a th:href="'/item/' + ${item.id} + '/update'"><button type="submit">Изменить</button></a><br>
-                <span class="cart" th:if="${item.enabled}">
-                    <a th:href="'/item/' + ${item.id} + '/delete'"><button type="submit">Удалить</button></a><br>
-                </span>
+                <a th:href="'/item/' + ${item.id} + '/delete'"><button type="submit">Удалить</button></a><br>
             </span>
             <span sec:authorize="hasAuthority('ADMIN')" class="cart"><br><br>
                 <span class="cart" th:if="${item.enabled}">
@@ -61,7 +59,7 @@
             </span>
             <span sec:authorize="hasAuthority('MODERATOR')" class="cart"><br><br>
                 <span class="cart" th:if="${item.enabled}">
-                <a th:href="'/item/' + ${item.id} + '/delete'"><button type="submit">Удалить</button></a><br>
+                    <a th:href="'/item/' + ${item.id} + '/delete'"><button type="submit">Удалить</button></a><br>
                 </span>
                 <span th:if="${!item.verifed}" class="cart">
                     <a th:href="'/item/' + ${item.id} + '/verifed'"><button type="submit">Одобрить</button></a><br>
