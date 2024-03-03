@@ -531,11 +531,6 @@ header {
  max-width: 400px;
 }
 
-.items {}
-    width: auto; /* Изменение ширины блоков с товарами на мобильных устройствах */
-      margin-left: auto;
-      margin-right: auto:
-}
 }
 
 @media only screen and (max-width: 600px) {
@@ -560,9 +555,11 @@ header {
    }
 
    .items > div {
-      width: 90%; /* Изменение ширины блоков с товарами на мобильных устройствах */
-      margin: 5%;
+       width: 100%; /* Ширина элементов списка на мобильных устройствах */
+       max-width: 300px; /* Максимальная ширина элементов, чтобы они не растягивались слишком сильно */
+       margin: 10px; /* Внешние отступы между элементами */
    }
+
 
    .input-container {
        display: inline-block;
