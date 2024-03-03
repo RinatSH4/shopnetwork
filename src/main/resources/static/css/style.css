@@ -194,6 +194,7 @@ span {
     margin: auto;
 }
 
+
 .product {
     display: flex;
     flex-wrap: wrap;
@@ -203,13 +204,19 @@ span {
     margin-bottom: 180px;
 }
 
-.product > div
-{
+.product > div {
     margin: 20px;
     box-sizing: border-box;
-    padding: 5px;
-    width: 50%px;
+    padding: 30px;
+    width: 300px; /* Фиксированная ширина блока */
+    color: white;
+    background: back;
 }
+
+.product img {
+    max-width: 100%; /* Картинка будет сжиматься до ширины блока */
+}
+
 
 
 .cart {
@@ -593,6 +600,10 @@ header {
     float: right;
     margin-left: 40px;
   }
+
+  product > div {
+    width: 90%; /* Ширина блока на мобильных устройствах */
+}
 
 
 
