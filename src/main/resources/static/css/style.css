@@ -180,7 +180,7 @@ a:hover {
     color: white;
     padding: 5px;
     margin-left: 180px;
-    bottom: 0;
+    margin-top: 20px;
 }
 
 
@@ -517,7 +517,6 @@ header {
     height: 400px;
     padding: 5px;
     width: 90%;
-
 }
 
 .input-container {
@@ -532,6 +531,11 @@ header {
  max-width: 400px;
 }
 
+.items {}
+    width: auto; /* Изменение ширины блоков с товарами на мобильных устройствах */
+      margin-left: auto;
+      margin-right: auto:
+}
 }
 
 @media only screen and (max-width: 600px) {
@@ -548,10 +552,16 @@ header {
         margin-right: 0;
      }
 
+   .items {
+        width: auto; /* Изменение ширины блоков с товарами на мобильных устройствах */
+        margin-left: auto;
+        margin-right: auto:
+   }
+
    .items > div {
       width: auto; /* Изменение ширины блоков с товарами на мобильных устройствах */
       margin-left: auto;
-      width: auto;
+      margin-right: auto:
    }
 
    .input-container {
