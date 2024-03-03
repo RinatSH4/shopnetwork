@@ -164,7 +164,7 @@ public class ItemController {
         User user = userRepository.findByUsername(userDetails.getUsername());
         model.addAttribute("item", item);
         System.out.println(item.getUser().getUsername());
-        //редактировать мы можем товар если мы админ, модератор либо мы сами продавец
+        //редактировать мы можем товар если мы сами продавец
         if (item.getUser() == user) {
             item.setEnabled(true);
             itemRepository.save(item);
@@ -181,7 +181,7 @@ public class ItemController {
         User user = userRepository.findByUsername(userDetails.getUsername());
         model.addAttribute("item", item);
         System.out.println(item.getUser().getUsername());
-        //редактировать мы можем товар если мы админ, модератор либо мы сами продавец
+        //редактировать мы можем товар если мы сами продавец
         if (item.getUser() == user) {
             item.setEnabled(false);
             itemRepository.save(item);
@@ -203,8 +203,8 @@ public class ItemController {
                              @AuthenticationPrincipal UserDetails userDetails) {
         Item item = itemRepository.findById(id).orElse(new Item());
         User admin = userRepository.findByUsername(userDetails.getUsername());
-        //редактировать мы можем товар если мы админ, модератор либо мы сами продавец
-        if (item.getUser().getUsername().equals(userDetails.getUsername()) || admin.getRoles().contains(Role.ADMIN)) {
+        //редактировать мы можем товар если мы сами продавец
+        if (item.getUser().getUsername().equals(userDetails.getUsername())) {
             item.editItem(title, info, image, price);
             item.setVerifed(false);
             itemRepository.save(item);
