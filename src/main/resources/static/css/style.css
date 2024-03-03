@@ -553,15 +553,15 @@ header {
      }
 
    .items {
-        width: auto; /* Изменение ширины блоков с товарами на мобильных устройствах */
-        margin-left: auto;
-        margin-right: auto:
+       width: 100%; /* Ширина блока на мобильных устройствах */
+       display: flex; /* Использование flexbox для центрирования */
+       flex-wrap: wrap; /* Разрешение переноса элементов на новую строку */
+       justify-content: center; /* Выравнивание элементов по центру горизонтали */
    }
 
    .items > div {
-      width: auto; /* Изменение ширины блоков с товарами на мобильных устройствах */
-      margin-left: auto;
-      margin-right: auto:
+      width: 90%; /* Изменение ширины блоков с товарами на мобильных устройствах */
+      margin: 5%;
    }
 
    .input-container {
