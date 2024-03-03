@@ -140,47 +140,51 @@ a:hover {
     display: flex;
     flex-wrap: wrap;
     padding-left: 5%;
-    padding-right: auto;
+    padding-right: 5%;
     justify-content: center;
     color: white;
 }
 
 .items img {
-    width: 95%; /* или конкретное значение в пикселях или процентах */
+    width: 100%;
     display: block;
     margin: 0 auto;
     margin-bottom: 20px;
 }
 
 .items > div {
-    float: left;
+    float: none;
     margin-bottom: 30px;
-    margin-left: 50px;
+    margin-left: auto;
     margin-right: auto;
     margin-top: 50px;
     box-sizing: border-box;
     padding: 5px;
     width: 320px;
-    background: #2b2c2c;
-}
-
-.items a {
-    float: left;
-    width: auto;
-    height: auto;
-    color: rgb(255, 255, 255);
+    background: #323232;
+    position: relative; /* добавлено */
 }
 
 .items p {
-    color: white;
+    color: rgb(240, 240, 240);
+    margin-bottom: 20px;
+}
+
+.items a {
+    float: none;
+    width: auto;
+    height: auto;
+    color: rgb(255, 255, 255);
 }
 
 .spanprice {
     background: #146E00;
     color: white;
     padding: 5px;
-    margin-left: 180px;
-    margin-top: 20px;
+    position: absolute; /* изменено на absolute */
+    bottom: -15px; /* добавлено */
+    left: 50%; /* добавлено */
+    transform: translateX(-50%); /* добавлено для центрирования по горизонтали */
 }
 
 
@@ -547,18 +551,20 @@ header {
         margin-right: 0;
      }
 
-   .items {
-       width: 100%; /* Ширина блока на мобильных устройствах */
-       display: flex; /* Использование flexbox для центрирования */
-       flex-wrap: wrap; /* Разрешение переноса элементов на новую строку */
-       justify-content: center; /* Выравнивание элементов по центру горизонтали */
-   }
-
-   .items > div {
-       width: 100%; /* Ширина элементов списка на мобильных устройствах */
-       max-width: 300px; /* Максимальная ширина элементов, чтобы они не растягивались слишком сильно */
-       margin: 10px; /* Внешние отступы между элементами */
-   }
+     .items {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .items > div {
+        width: 100%;
+        max-width: 300px;
+        margin: 10px auto; /* изменено на auto */
+        margin-bottom: 20px; /* изменено на 20px */
+    }
+    
 
 
    .input-container {
@@ -608,9 +614,9 @@ header {
        }
 
        .cart_count {
-                  color: white;
-                  padding: 2px;
-                  font-size: 7px;
-                  right: 10px;
-              }
+            color: white;
+            padding: 2px;
+            font-size: 7px;
+            right: 10px;
+        }
 }
