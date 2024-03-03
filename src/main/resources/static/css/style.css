@@ -208,7 +208,7 @@ span {
     margin: 20px;
     box-sizing: border-box;
     padding: 30px;
-    width: 300px; /* Фиксированная ширина блока */
+    width: 500px; /* Фиксированная ширина блока */
     color: white;
     background: back;
 }
@@ -601,9 +601,13 @@ header {
     margin-left: 40px;
   }
 
-  product > div {
-    width: 90%; /* Ширина блока на мобильных устройствах */
+  .product > div {
+    margin: auto;
+    box-sizing: border-box;
+    width: 90%; /* Фиксированная ширина блока */
 }
+
+
 
 
 

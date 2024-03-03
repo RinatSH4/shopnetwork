@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Error</title>
+  <link rel="icon" href="https://img.icons8.com/?size=48&id=Oi6NZDZTenrC&format=png" type="image/x-icon">
+  <link rel="stylesheet" th:href="|@{css/style.css}|">
+  <meta name="enot" content="16fb1b59">
+</head>
+<body>
+
+<div th:replace="~{/layouts/header :: header}"></div>
+
+<main>
+  <h1>Ошибка 404</h1>
+  <div class="container">
+        <a th:href="'/item/' + ${el.id}" title="Вернуться на главную" id="item_link">
+          <h2>Вернуться на главную</h2>
+        </a>
+  </div>
+</main>
+
+<div th:replace="~{/layouts/footer :: footer}"></div>
+
+</body>
+</html>

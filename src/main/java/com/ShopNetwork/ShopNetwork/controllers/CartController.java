@@ -127,6 +127,21 @@ public class CartController {
         return "redirect:/user";
     }
 
+    @GetMapping("/item/buy/{id}/cancel") //отменить товар из личного кабинета
+    public String buyUserPageCancel(@PathVariable(value = "id") long id, @AuthenticationPrincipal UserDetails userDetails) {
+        Orders order = ordersRepository.findById(id).orElseGet(Orders::new);
+        User user = userRepository.findByUsername(userDetails.getUsername());
+
+        //проверим мой ли это заказ и проверим активен ли товар для заказа
+        if(order.getUser().equals(user) && order.getItem().isEnabled()) {
+            if (!order.isPay()) {
+                //если он еще не оплачен, то можно отказаться
+                ordersRepository.delete(order);
+            }
+        }
+        return "redirect:/user";
+    }
+
     //перевод в md5 для нереализованной оплаты
     public static String md5(String key) throws NoSuchAlgorithmException {
         MessageDigest md5 = MessageDigest.getInstance("MD5");

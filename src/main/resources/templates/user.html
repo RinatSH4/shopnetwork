@@ -169,10 +169,11 @@
                   <a th:href="'/user/' + ${el.seller.id}" ><p>Страница продавца</p></a>
                   <a th:href="'/user/' + ${el.seller.id} + '/chat'"><p>Написать продавцу</p></a>
                 </a>
-                <span class="cart" th:if="${item.enabled}">
+                <span class="cart" th:if="${el.item.enabled}">
                     <a th:href="'/item/buy/' + ${el.id}"><button type="submit">Оплатить</button></a>
+                    <a th:href="'/item/buy/' + ${el.id} + '/cancel'"><button type="submit">Отмена</button></a>
                 </span>
-                <span class="cart" th:if="${!item.enabled}">
+                <span class="cart" th:if="${!el.item.enabled}">
                     <p style="color: red">товар снят с продажи</p>
                 </span>
                 </div>
