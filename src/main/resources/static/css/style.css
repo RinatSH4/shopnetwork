@@ -155,8 +155,7 @@ a:hover {
 .items > div {
     float: none;
     margin-bottom: 30px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 20px;
     margin-top: 50px;
     box-sizing: border-box;
     padding: 5px;
@@ -537,7 +536,7 @@ header {
 
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 768px) {
     header {
         display: flex;
         flex-direction: column;
@@ -562,7 +561,7 @@ header {
         width: 100%;
         max-width: 300px;
         margin: 10px auto; /* изменено на auto */
-        margin-bottom: 20px; /* изменено на 20px */
+        margin-bottom: 40px; /* изменено на 20px */
     }
     
 
