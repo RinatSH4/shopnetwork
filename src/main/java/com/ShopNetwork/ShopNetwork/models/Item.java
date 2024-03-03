@@ -21,6 +21,7 @@ public class Item {
     private float price;
 
     private boolean verifed = false;
+    private boolean enabled;
 
     @JoinColumn(name = "user_id")
     @OneToOne(fetch = FetchType.EAGER)
@@ -41,6 +42,7 @@ public class Item {
         this.image = image;
         this.price = price;
         this.user = user;
+        this.enabled = true;
     }
 
     public void editItem(String title, String info, String image, float price) {
@@ -51,5 +53,6 @@ public class Item {
     }
 
     public Item() {
+        this.enabled = true;
     }
 }

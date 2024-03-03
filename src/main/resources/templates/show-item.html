@@ -47,27 +47,40 @@
     <span sec:authorize="isAuthenticated()" class="cart">
             <span th:if="${user.username == #authentication.principal.username}" class="cart"><br><br>
                 <a th:href="'/item/' + ${item.id} + '/update'"><button type="submit">Изменить</button></a><br>
-                <a th:href="'/item/' + ${item.id} + '/delete'"><button type="submit">Удалить</button></a><br>
+                <span class="cart" th:if="${item.enabled}">
+                    <a th:href="'/item/' + ${item.id} + '/delete'"><button type="submit">Удалить</button></a><br>
+                </span>
             </span>
             <span sec:authorize="hasAuthority('ADMIN')" class="cart"><br><br>
+                <span class="cart" th:if="${item.enabled}">
                 <a th:href="'/item/' + ${item.id} + '/delete'"><button type="submit">Удалить</button></a><br>
-                <span th:if="${!item.verifed}" class="cart">
+                </span>
+                    <span th:if="${!item.verifed}" class="cart">
                     <a th:href="'/item/' + ${item.id} + '/verifed'"><button type="submit">Одобрить</button></a><br>
                 </span>
             </span>
             <span sec:authorize="hasAuthority('MODERATOR')" class="cart"><br><br>
+                <span class="cart" th:if="${item.enabled}">
                 <a th:href="'/item/' + ${item.id} + '/delete'"><button type="submit">Удалить</button></a><br>
+                </span>
                 <span th:if="${!item.verifed}" class="cart">
                     <a th:href="'/item/' + ${item.id} + '/verifed'"><button type="submit">Одобрить</button></a><br>
                 </span>
             </span>
            <span th:if="${item.verifed}" class="cart">
-            <span th:if="${user.username != #authentication.principal.username}" class="cart"><br><br>
-                <a th:href="'/item/' + ${item.id} + '/buy'"><button type="submit">Добавить в корзину</button></a><br>
-            </span>
+               <span class="cart" th:if="${item.enabled}">
+                    <span th:if="${user.username != #authentication.principal.username}" class="cart"><br><br>
+                        <a th:href="'/item/' + ${item.id} + '/buy'"><button type="submit">Добавить в корзину</button></a><br>
+                    </span>
+               </span>
            </span>
+            <span th:if="${!item.enabled}" class="cart">
+                <p style="color: red">товар снят с продажи</p>
+            </span>
     </span>
 </div>
+
+    <br><hr><br>
 
     <div class="container" th:if="${item.verifed}">
         <a th:href="'/item/' + ${item.id} + '/chat'" title="Открыть чат товара">
@@ -93,7 +106,9 @@
             </div>
         </span>
     </div>
-
+        <br>
+        <hr>
+        <br>
             <h2>Отзывы:</h2>
         <div class="container">
             <div th:if="${!reviews.isEmpty()}">

@@ -49,7 +49,9 @@ public class CartController {
     @RequestMapping("/item/{id}/buy")
     public String addToCart(@PathVariable(value = "id") long id, @ModelAttribute("Cart") Cart cart) {
         Item item = itemRepository.findById(id).orElseGet(Item::new); //находим товар по его id, что указан в ссылке
-        cart.setItems(item); //и передаем этот товар в сессию
+        //если товар активен, то можно добавить в корзину
+        if(item.isEnabled())
+            cart.setItems(item); //и передаем этот товар в сессию
         return "redirect:/ShoppingCart"; //автопереход на корзину
     }
 
@@ -107,20 +109,20 @@ public class CartController {
     public String buyUserPage(@PathVariable(value = "id") long id, @AuthenticationPrincipal UserDetails userDetails) {
         Orders order = ordersRepository.findById(id).orElseGet(Orders::new);
         User user = userRepository.findByUsername(userDetails.getUsername());
-        if(order.getUser().equals(user)) {
 
-
+        //проверим мой ли это заказ и проверим активен ли товар для заказа
+        if(order.getUser().equals(user) && order.getItem().isEnabled()) {
             double itemPrice = order.getItem().getPrice(); //получаем цену для оплаты
             if (user.getBalance() >= itemPrice) {
                 order.setPay(true);
+                order.setWork(false);
                 Set<OrderStatus> status = new HashSet<>();
                 status.add(OrderStatus.PAID); //добавлеем новый статус
                 order.setOrderStatusSet(status);
                 user.setBalance(user.getBalance() - itemPrice); //списываем деньги у пользователя за товар
                 order.setSumm(itemPrice); //добавляем сумму к оплаченному товару
+                ordersRepository.save(order); //и сохраняем его
             }
-
-            ordersRepository.save(order); //и сохраняем его
         }
         return "redirect:/user";
     }

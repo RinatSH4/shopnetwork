@@ -116,8 +116,8 @@ a {
 
 img {
     object-fit: cover;
-    height: 100%;
-    width: 100%;
+    height: auto;
+    width: auto;
 }
 
 a:hover {
@@ -140,28 +140,55 @@ a:hover {
     display: flex;
     flex-wrap: wrap;
     padding-left: 5%;
-    padding-right: 5%;
+    padding-right: auto;
     justify-content: center;
+    color: white;
+}
+
+.items img {
+    width: 95%; /* или конкретное значение в пикселях или процентах */
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 20px;
 }
 
 .items > div {
     float: left;
     margin-bottom: 30px;
     margin-left: 50px;
+    margin-right: auto;
     margin-top: 50px;
     box-sizing: border-box;
     padding: 5px;
     width: 320px;
-    border: 1px dotted gray;
-    border-radius: 10px;
+    background: #2b2c2c;
 }
 
 .items a {
     float: left;
-    height: 250px;
     width: auto;
     height: auto;
-    color: black;
+    color: rgb(255, 255, 255);
+}
+
+.items p {
+    color: white;
+}
+
+.spanprice {
+    background: #146E00;
+    color: white;
+    padding: 5px;
+    margin-left: 180px;
+    bottom: 0;
+}
+
+
+span {
+    color: white;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin: auto;
 }
 
 .product {
@@ -181,13 +208,6 @@ a:hover {
     width: 50%px;
 }
 
-span {
-    background: #146E00;
-    color: white;
-    padding-left: 5px;
-    padding-right: 5px;
-    margin: auto;
-}
 
 .cart {
     background: none;

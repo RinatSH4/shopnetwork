@@ -46,9 +46,8 @@ public class WebSecurityConfig {
                         .antMatchers("/css/**", "/js/**", "/images/**", "/registration").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(formLogin -> formLogin
-                        .loginPage("/login") //с этой страницы мы молучаем данные об авторизации, так же страница доступна всем
+                        .loginPage("/login").permitAll() //с этой страницы мы молучаем данные об авторизации, так же страница доступна всем
                         .defaultSuccessUrl("/user") //после авторизации нас автоматом перебрасывает на эту страницу
-                        .permitAll()
                         .and().authenticationProvider(authProvider))
                 .logout().addLogoutHandler(customLogoutHandler);
         return http.build();

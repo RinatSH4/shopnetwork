@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NoResultException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.core.io.ResourceLoader;
@@ -46,52 +47,26 @@ public class ItemController {
     }
 
 
-    //добавление нового товара
-    //тут аналогично как и с добавлением нового пользователя, нового коментария и т.д
     @PostMapping("/item/add")
     public String newItem(@RequestParam String title,
                           @RequestParam String info,
                           @RequestParam String image,
                           @RequestParam float price,
                           @AuthenticationPrincipal UserDetails userDetails) throws IOException {
-        //находим самих себя через userDetails
-        //потому что мы же выкладываем товар, а не Василий-Гвоздодер
         User user = userRepository.findByUsername(userDetails.getUsername());
-//
-//        String uploadDir = "/images/"; //путь для сохранения файла
-//
-//        // Генерация уникального имени файла
-//        String uniqueFileName = UUID.randomUUID() + "_" + itemImage.getOriginalFilename();
-//
-//        Path filePath = Paths.get(uploadDir, uniqueFileName);
-//        try {
-//            // Сохранение файла на сервере
-//            Files.copy(itemImage.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            //String image = uploadDir + uniqueFileName; // относительный путь для доступа к изображениям
-
-        //создаем новый товар на основе модели Item, передаем в него все, что ввели в форму
-        //название, описание, фото, цену ну и конечно же нужно сказать кто продавец
-        //именно МЫ! а не какой то там Григорий Погремух
-            Item item = new Item(title, info, image, price, user);
-            itemRepository.save(item); //как создали, обязательно сохранить в репозитории, только тогда произойдет сохранение в таблицу
-            return "redirect:/item/" + item.getId();
-            //ну как все успешно прошло - нас перебросит на страницу товара по id
-        //как раз что описано ниже
+        Item item = new Item(title, info, image, price, user);
+        itemRepository.save(item);
+        return "redirect:/item/" + item.getId();
     }
 
-    //страница товара, у каждого товара, пользователя, отзыва есть уникальный идентефикатор ID
-    //основа основ, база. Все на нем то и завязано, и товар мы будем искать по id
-    //передаем все необходимое что у него есть
 
     @GetMapping("/item/{id}")
     public String show(@PathVariable(value = "id") long id, Model model, @AuthenticationPrincipal UserDetails userDetails) throws ChangeSetPersister.NotFoundException {
-        //а именно находим его по id(он же в ссылке наверху {id} - и преобразуем его в long
-        //@PathVariable(value = "id") long id
-        Item item = itemRepository.findById(id).orElseGet(Item::new);
-        //находим конечно же продавца: Товар->Получить пользователя->получить его id
-        //и дальше по репозиторию находим модель того самого продавца
-        User user = userRepository.findById(item.getUser().getId()).orElseGet(User::new);
 
+        Item item = itemRepository.findById(id).orElseGet(Item::new);
+        User user = userRepository.findByUsername(item.getUser().getUsername());
+
+        System.out.println(item.getUser().getUsername());
         //тут передаем товар
         model.addAttribute("item", item);
         //тут продавца
@@ -127,22 +102,26 @@ public class ItemController {
         return "show-item";
     }
 
-
     //удаление товара
     @GetMapping("/item/{id}/delete")
     public String deleteItem(@PathVariable (value = "id") long id, @AuthenticationPrincipal UserDetails userDetails) {
         Item item = itemRepository.findById(id).orElse(new Item());
         User user = userRepository.findByUsername(userDetails.getUsername());
-        //выше поиск аналогичный как в верхних функциях
-        //тут в условии написано, что удалить товар могу только если сам его выложил
-        //ну и админ с модератором может его удалять
-        //если что то не понравится
-        if (item.getUser().getId() == user.getId() ||
+        Iterable<Orders> orders = ordersRepository.findByItemId(id);
+
+        List<Orders> orderIsWork = new ArrayList<>();
+        for (Orders o : orders) {
+            if (o.isWork())
+                orderIsWork.add(o);
+        }
+
+        //в конце проверим, в работе ли товар, а то может доставляется или еще что
+        if ((item.getUser().getId() == user.getId() ||
                 user.getRoles().contains(Role.ADMIN) ||
-                user.getRoles().contains(Role.MODERATOR)) {
+                user.getRoles().contains(Role.MODERATOR)) && orderIsWork.isEmpty()) {
 
                 //раз уж удаляем товар, удаляем его во всех таблицах
-                Iterable<Orders> orders = ordersRepository.findByItemId(id);
+
                 for (Orders order : orders)
                     ordersRepository.delete(order);
 
@@ -168,8 +147,9 @@ public class ItemController {
         Item item = itemRepository.findById(id).orElse(new Item());
         User user = userRepository.findByUsername(userDetails.getUsername());
         model.addAttribute("item", item);
+        System.out.println(item.getUser().getUsername());
         //редактировать мы можем товар если мы админ, модератор либо мы сами продавец
-        if (item.getUser().getId() == user.getId() ||
+        if ((item.getUser() == user) ||
                 user.getRoles().contains(Role.ADMIN) ||
                 user.getRoles().contains(Role.MODERATOR))
             return "item-update";
@@ -177,13 +157,50 @@ public class ItemController {
             return "redirect:/";
     }
 
+    //делаем товар активным
+    @GetMapping("/item/{id}/setenabletrue")
+    public String setenabletrue(@PathVariable(value = "id") long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        Item item = itemRepository.findById(id).orElse(new Item());
+        User user = userRepository.findByUsername(userDetails.getUsername());
+        model.addAttribute("item", item);
+        System.out.println(item.getUser().getUsername());
+        //редактировать мы можем товар если мы админ, модератор либо мы сами продавец
+        if (item.getUser() == user) {
+            item.setEnabled(true);
+            itemRepository.save(item);
+            return "item-update";
+        }
+        else
+            return "redirect:/";
+    }
+
+    //делаем товар НЕ активным
+    @GetMapping("/item/{id}/setenablefalse")
+    public String setenablefalse(@PathVariable(value = "id") long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        Item item = itemRepository.findById(id).orElse(new Item());
+        User user = userRepository.findByUsername(userDetails.getUsername());
+        model.addAttribute("item", item);
+        System.out.println(item.getUser().getUsername());
+        //редактировать мы можем товар если мы админ, модератор либо мы сами продавец
+        if (item.getUser() == user) {
+            item.setEnabled(false);
+            itemRepository.save(item);
+            return "item-update";
+        }
+        else
+            return "redirect:/";
+    }
+
+
+
     //редактирование товара
     @PostMapping("/item/{id}/update")
     public String updateItem(@PathVariable(value = "id") long id,
                              @RequestParam String title,
                              @RequestParam String info,
                              @RequestParam String image,
-                             @RequestParam float price, @AuthenticationPrincipal UserDetails userDetails) {
+                             @RequestParam float price,
+                             @AuthenticationPrincipal UserDetails userDetails) {
         Item item = itemRepository.findById(id).orElse(new Item());
         User admin = userRepository.findByUsername(userDetails.getUsername());
         //редактировать мы можем товар если мы админ, модератор либо мы сами продавец
@@ -191,6 +208,8 @@ public class ItemController {
             item.editItem(title, info, image, price);
             item.setVerifed(false);
             itemRepository.save(item);
+            System.out.println(item.isEnabled());
+            return "redirect:/item/" + id;
         }
         return "redirect:/item/" + id;
     }

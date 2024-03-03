@@ -24,10 +24,20 @@
             <h5>ссылка на фото:</h5>
             <input type="text" th:value="${item.image}" name="image">
             <h5>цена:</h5>
-            <input type="number" th:value="${item.price}" name="price">
+            <input type="number" th:value="${item.price}" name="price"> <br>
+            <br>
             <button type="submit" id="regbutton">Изменить</button>
         </form>
     </div>
+
+<div class="container">
+    <span th:if="${item.enabled}">
+            <a th:href="'/item/' + ${item.id} + '/setenablefalse'"><button type="submit">Снять с продажи</button></a>
+        </span>
+    <span th:if="${!item.enabled}">
+            <a th:href="'/item/' + ${item.id} + '/setenabletrue'"><button type="submit">Возобновить продажу</button></a>
+        </span>
+</div>
 <br><br><br><br><br><br>
     <div th:replace="~{/layouts/footer :: footer}"></div>
 </body>

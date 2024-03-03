@@ -32,9 +32,9 @@ public class Orders {
     @JoinColumn(name = "item_id")
     @OneToOne(fetch = FetchType.EAGER)
     private Item item;
-
     private boolean isPay;
     private double summ;
+    private boolean isWork; //если он в работе
 
     public Orders(Item item, User user, User seller, String address, Set<OrderStatus> orderStatusSet) {
         this.item = item;
@@ -43,9 +43,11 @@ public class Orders {
         this.address = address;
         this.orderStatusSet = orderStatusSet;
         this.isPay = false;
+        this.isWork = true;
     }
 
     public Orders() {
         summ = 0;
+        isWork = true;
     }
 }

@@ -14,8 +14,9 @@
 <main>
   <h2>Проверка товаров на модерацию</h2>
   <div class="container">
-    <div class="items" th:if="${!items.isEmpty()}">
+    <div class="items" th:if="${!items.isEmpty()}" style="border: none">
       <div th:each="el : |${items}|">
+          <span th:if="${el.enabled}" class="cart">
           <a th:href="'/item/' + ${el.id}" title="Открыть страницу товара" id="item_link">
             <img th:src="${el.image}" th:alt="${el.title}">
             <h3 th:text="${el.title}" />
@@ -30,7 +31,7 @@
                 <a th:href="'/item/' + ${el.id} + '/delete'"><button type="submit">Удалить</button></a><br>
                 <a th:href="'/item/' + ${el.id} + '/verifed'"><button type="submit">Одобрить</button></a><br>
           </span>
-
+          </span>
       </div>
     </div>
     <div th:if="${items.isEmpty()}" class="block">

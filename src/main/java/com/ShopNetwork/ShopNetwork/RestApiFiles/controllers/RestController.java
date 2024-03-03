@@ -156,11 +156,18 @@ public class RestController {
         final JwtAuthentication authInfo = authService.getAuthInfo();
         User user = userRepository.findByUsername(authInfo.getUsername());
         Item item = itemRepository.findById(id).orElse(new Item());
+        List<Orders> orders = ordersRepository.findByItemId(id);
+
+        List<Orders> orderIsWork = new ArrayList<>();
+        for (Orders o : orders) {
+            if (o.isWork())
+                orderIsWork.add(o);
+        }
         Map<String, String> responce = new HashMap<>();
-        if(authInfo.getRoles().equals(Role.USER) || authInfo.getRoles().equals(Role.ADMIN)) {
-            if (item.getUser().getId() == user.getId() || authInfo.getRoles().equals(Role.ADMIN)) {
+        if(authInfo.getRoles().contains(Role.USER) || authInfo.getRoles().contains(Role.ADMIN)) {
+            if (item.getUser().getId() == user.getId() && orderIsWork.isEmpty()) {
                 //раз уж удаляем товар, удаляем его во всех таблицах
-                List<Orders> orders = ordersRepository.findByItemId(id);
+
                 for (Orders order : orders)
                     ordersRepository.delete(order);
 
@@ -220,6 +227,7 @@ public class RestController {
             if (item.getUser().getId() == user.getId()) {
                 item.editItem(edititem.getTitle(), edititem.getInfo(), edititem.getImage(),
                         edititem.getPrice());
+                item.setEnabled(edititem.isEnabled());
                 itemRepository.save(item);
                 responce.put("id:", String.valueOf(item.getId()));
                 responce.put("new_title:", item.getTitle());
@@ -227,6 +235,7 @@ public class RestController {
                 responce.put("new_info:", item.getInfo());
                 responce.put("new_price:", String.valueOf(item.getPrice()));
                 responce.put("user_id:", String.valueOf(item.getUser().getId()));
+                responce.put("enabled:", String.valueOf(item.isEnabled()));
             } else {
                 responce.put("message:", "Ошибка редактирования товара");
             }
@@ -302,10 +311,13 @@ public class RestController {
         final JwtAuthentication authInfo = authService.getAuthInfo();
         User user = userRepository.findByUsername(authInfo.getUsername());
         Item item = itemRepository.findById(itemId).orElseGet(Item::new);
-
-            Orders order = new Orders(item, user, item.getUser(), address, Collections.singleton(OrderStatus.PENDING));
+        if(item.isEnabled()) {
+            Orders order = new Orders(item, user, item.getUser(), address, Collections.singleton(OrderStatus.NOPAID));
+            order.setWork(true);
             ordersRepository.save(order);
-        return ResponseEntity.ok("\"message\": \"Товары перешли в заказ\"");
+            return ResponseEntity.ok("\"message\": \"Товар еще не оплачен\"");
+        }
+        return ResponseEntity.ok("\"message\": \"Товар не автивен\"");
     }
 
     //----------------------тут запрос на статус заказа------------------

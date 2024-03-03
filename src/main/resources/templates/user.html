@@ -16,15 +16,16 @@
 <div class="container">
   <img th:src="${user.photo}" class="product" style="height: 300px; width: 300px; overflow: auto; margin-bottom: 50px">
 </div>
-
         <div class="addmoney">
         Мой баланс: <div th:text="${userBalance}" class="balance"/> р.<br>
         <form th:action="'/addmoney'" method="post" class="moneyform">
             <input type="number" placeholder="1000.0р" name="summ" class="moneyinput">
             <button type="submit" class="moneybutton">Пополнить</button>
         </form>
-        </div><br><br>
-
+        </div>
+    <br>
+    <hr>
+    <br>
   <div class="container" style="margin: auto;">
     <form method="post" th:action="@{/user/update}">
       <h5>имя пользователя:</h5>
@@ -43,8 +44,9 @@
       <button type="submit">Выйти</button>
     </form>
   </div>
-  <br><br>
-
+    <br>
+    <hr>
+    <br>
   <h5>Мои чаты:</h5>
   <div class="container">
     <div th:if="${!chats.isEmpty()}">
@@ -64,8 +66,11 @@
         <p>Нет чатов</p>
       </div>
     </div>
-  </div> <br><br>
+  </div>
 
+    <br>
+    <hr>
+    <br>
 
   <h5>Мои друзья:</h5><br>
   <div class="container">
@@ -88,7 +93,11 @@
       <p>У вас пока нет друзей</p>
     </div>
   </div>
-  </div><br><br>
+  </div>
+
+    <br>
+    <hr>
+    <br>
 
   <h5>Мои подписчики:</h5><br>
   <div class="container">
@@ -113,7 +122,11 @@
         <p>У вас пока нет подписчиков</p>
       </div>
     </div>
-  </div> <br><br>
+  </div>
+
+    <br>
+    <hr>
+    <br>
 
   <h5>Мои покупки:</h5><br>
   <div class="container">
@@ -156,7 +169,12 @@
                   <a th:href="'/user/' + ${el.seller.id}" ><p>Страница продавца</p></a>
                   <a th:href="'/user/' + ${el.seller.id} + '/chat'"><p>Написать продавцу</p></a>
                 </a>
-                <a th:href="'/item/buy/' + ${el.id}"><button type="submit">Оплатить</button></a>
+                <span class="cart" th:if="${item.enabled}">
+                    <a th:href="'/item/buy/' + ${el.id}"><button type="submit">Оплатить</button></a>
+                </span>
+                <span class="cart" th:if="${!item.enabled}">
+                    <p style="color: red">товар снят с продажи</p>
+                </span>
                 </div>
         </div>
     </div>
@@ -168,6 +186,9 @@
   </div> <br>
   </div>
 
+    <br>
+    <hr>
+    <br>
 
   <h5>Мои продажи:</h5><br>
   <div class="container" >
@@ -243,8 +264,6 @@
             </div>
       </div></div>
   </div>
-
-
   <div th:if="${mySells.isEmpty()}">
     <div class="container">
       <p>У вас ни одной продажи</p>
