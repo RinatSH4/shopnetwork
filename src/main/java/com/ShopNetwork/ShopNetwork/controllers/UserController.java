@@ -5,13 +5,22 @@ import com.ShopNetwork.ShopNetwork.models.*;
 import com.ShopNetwork.ShopNetwork.repo.*;
 import com.ShopNetwork.ShopNetwork.service.FriendServise;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.util.*;
 
@@ -239,7 +248,6 @@ public class UserController {
             user.setName(userForm.getName());
             user.setSurname(userForm.getSurname());
             user.setEmail(userForm.getEmail());
-            user.setPhoto(userForm.getPhoto());
             userRepository.save(user);
         } else {
             System.out.println("Пользователь не найден!");
@@ -247,6 +255,27 @@ public class UserController {
 
         return "redirect:/user";
     }
+
+    //работа с фото пользователя
+
+    public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/src/main/resources/static/photos";
+    @PostMapping("/upload") public String uploadImage(Model model, @RequestParam("image") MultipartFile file,
+                                                      @AuthenticationPrincipal UserDetails userDetails) throws IOException {
+        StringBuilder fileNames = new StringBuilder();
+        Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
+        fileNames.append(file.getOriginalFilename());
+        Files.write(fileNameAndPath, file.getBytes());
+        User user = userRepository.findByUsername(userDetails.getUsername());
+        user.setPhoto("/photos/" + file.getOriginalFilename());
+        userRepository.save(user);
+        return "redirect:/user";
+    }
+
+    @GetMapping("/photos")
+    public String photos() {
+        return "redirect:/index";
+    }
+
 
 
     //переход на страницу другого пользователя

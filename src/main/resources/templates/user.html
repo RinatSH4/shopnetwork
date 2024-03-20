@@ -26,6 +26,13 @@
     <br>
     <hr>
     <br>
+    <div class="container">
+        <form method="POST" enctype="multipart/form-data" th:action="@{/upload}">
+            Добавление фото: <input type="file" name="image"><br />
+            <input type="submit" value="Загрузить фото">
+        </form>
+    </div>
+
   <div class="container" style="margin: auto;">
     <form method="post" th:action="@{/user/update}">
       <h5>имя пользователя:</h5>
@@ -33,9 +40,7 @@
       <h5>фамилия пользователя:</h5>
       <input type="text" name="surname" th:value="${user.surname}">
       <h5>email:</h5>
-      <input type="text" name="email" th:value="${user.email}"> 
-      <h5>фото:</h5>
-      <input type="text" name="photo" th:value="${user.photo}"> 
+      <input type="text" name="email" th:value="${user.email}">
       <button type="submit" >Изменить</button>
     </form>
   </div>

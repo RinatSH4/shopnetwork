@@ -16,10 +16,15 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NoResultException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @SessionAttributes({"Cart", "verifedItems"})
@@ -47,16 +52,28 @@ public class ItemController {
     }
 
 
+    public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/src/main/resources/static/itemphoto";
     @PostMapping("/item/add")
     public String newItem(@RequestParam String title,
                           @RequestParam String info,
-                          @RequestParam String image,
                           @RequestParam float price,
+                          @RequestParam("image") MultipartFile file,
                           @AuthenticationPrincipal UserDetails userDetails) throws IOException {
         User user = userRepository.findByUsername(userDetails.getUsername());
+
+        StringBuilder fileNames = new StringBuilder();
+        Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
+        fileNames.append(file.getOriginalFilename());
+        Files.write(fileNameAndPath, file.getBytes());
+        String image = "/itemphoto/" + file.getOriginalFilename();
         Item item = new Item(title, info, image, price, user);
         itemRepository.save(item);
         return "redirect:/item/" + item.getId();
+    }
+
+    @GetMapping("/itemphoto")
+    public String itemphoto() {
+        return "redirect:/index";
     }
 
 
@@ -143,7 +160,8 @@ public class ItemController {
 
     //страница редактирования товара
     @GetMapping("/item/{id}/update")
-    public String update(@PathVariable(value = "id") long id, Model model, @AuthenticationPrincipal UserDetails userDetails) {
+    public String update(@PathVariable(value = "id") long id, Model model,
+                         @AuthenticationPrincipal UserDetails userDetails) {
         Item item = itemRepository.findById(id).orElse(new Item());
         User user = userRepository.findByUsername(userDetails.getUsername());
         model.addAttribute("item", item);
@@ -198,17 +216,25 @@ public class ItemController {
     public String updateItem(@PathVariable(value = "id") long id,
                              @RequestParam String title,
                              @RequestParam String info,
-                             @RequestParam String image,
+                             @RequestParam("image") MultipartFile file,
                              @RequestParam float price,
-                             @AuthenticationPrincipal UserDetails userDetails) {
+                             @AuthenticationPrincipal UserDetails userDetails) throws IOException {
         Item item = itemRepository.findById(id).orElse(new Item());
-        User admin = userRepository.findByUsername(userDetails.getUsername());
+
+        StringBuilder fileNames = new StringBuilder();
+        Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, file.getOriginalFilename());
+        fileNames.append(file.getOriginalFilename());
+        Files.write(fileNameAndPath, file.getBytes());
+        String image;
+        if (file.getOriginalFilename().isEmpty())
+            image = "/itemphoto/" + file.getOriginalFilename();
+        else
+            image = item.getImage();
         //редактировать мы можем товар если мы сами продавец
         if (item.getUser().getUsername().equals(userDetails.getUsername())) {
             item.editItem(title, info, image, price);
             item.setVerifed(false);
             itemRepository.save(item);
-            System.out.println(item.isEnabled());
             return "redirect:/item/" + id;
         }
         return "redirect:/item/" + id;

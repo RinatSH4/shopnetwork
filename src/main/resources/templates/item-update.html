@@ -16,13 +16,13 @@
 
 <h4>Редактирование товара</h4><br>
     <div class="container">
-        <form method="post" th:action="'/item/' + ${item.id} + '/update'">
+        <form method="post" th:action="'/item/' + ${item.id} + '/update'" enctype="multipart/form-data">
             <h5>название:</h5>
             <input type="text" name="title" th:value="${item.title}">
             <h5>описание товара:</h5>
             <textarea rows="10" name="info" th:text="${item.info}" id="textarea"></textarea>
-            <h5>ссылка на фото:</h5>
-            <input type="text" th:value="${item.image}" name="image">
+            <h5>фото:</h5>
+            <input type="file" name="image"><br>
             <h5>цена:</h5>
             <input type="number" th:value="${item.price}" name="price"> <br>
             <br>

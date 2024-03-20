@@ -43,7 +43,7 @@ public class WebSecurityConfig {
                         .antMatchers("/admin", "/admin/**").hasRole("ADMIN") // данные ссылки доступны только для тех, у кого роль Админа
                         .antMatchers("/user", "/item/add", "/item/*/delete", "/item/*/update").authenticated() //ссылки доступны только авторизованным пользователям
                         .antMatchers("/", "/api/", "/index", "/item/*").permitAll() //где .permitAll() - доступно всем
-                        .antMatchers("/css/**", "/js/**", "/images/**", "/registration").permitAll()
+                        .antMatchers("/css/**", "/js/**", "/images/**", "/registration", "/photos/**", "/itemphoto/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login").permitAll() //с этой страницы мы молучаем данные об авторизации, так же страница доступна всем

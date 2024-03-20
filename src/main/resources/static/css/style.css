@@ -209,7 +209,6 @@ span {
     box-sizing: border-box;
     padding: 30px;
     width: 500px; /* Фиксированная ширина блока */
-    color: white;
     background: back;
 }
 
